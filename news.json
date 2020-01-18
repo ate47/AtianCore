@@ -1,0 +1,35 @@
+{
+    "message": "Hello from GitHub",
+    "mods": [
+        {
+            "name": "Advanced Creative Tab",
+            "author": "ATE47",
+            "icon": "https://media.forgecdn.net/avatars/thumbnails/158/524/64/64/636652887647164978.png",
+            "desc": "Borried about the old minecraft stuff ? This mod is made for you ! it add new items modifiers for your creative mode",
+            "pageLink": "https://www.curseforge.com/minecraft/mc-mods/advanced-extended-creative-mode",
+            "versions": [
+                {
+                    "link": "https://www.curseforge.com/minecraft/mc-mods/advanced-extended-creative-mode/download/2857425/file",
+                    "version": "1.13.2"
+                },
+                {
+                    "link": "https://www.curseforge.com/minecraft/mc-mods/advanced-extended-creative-mode/download/2857431/file",
+                    "version": "1.14.2"
+                },
+                {
+                    "link": "https://www.curseforge.com/minecraft/mc-mods/advanced-extended-creative-mode/download/2857451/file",
+                    "version": "1.14.4"
+                },
+                {
+                    "link": "https://www.curseforge.com/minecraft/mc-mods/advanced-extended-creative-mode/download/2857481/file",
+                    "version": "1.15"
+                },
+                {
+                    "link": "https://www.curseforge.com/minecraft/mc-mods/advanced-extended-creative-mode/download/2857493/file",
+                    "version": "1.15.1"
+                }
+            ]
+        }
+    
+    ]
+}
