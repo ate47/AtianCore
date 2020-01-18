@@ -19,6 +19,13 @@ public class Button implements Element {
 		};
 	}
 
+	/**
+	 * add an action when the client press the button, this action will be performed
+	 * after every already registered action
+	 * 
+	 * @param action the action to add
+	 * @return this
+	 */
 	public Button addAction(Consumer<Button> action) {
 		this.action = this.action == null ? action : this.action.andThen(action);
 		return this;

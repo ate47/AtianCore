@@ -29,10 +29,14 @@ public class ListUi extends Ui {
 		return b;
 	}
 
-	public void addChildren(ListElement element) {
+	public void addListElement(ListElement element) {
 		childrens.add(element);
 		if (init)
 			defineButtons();
+	}
+	
+	public List<ListElement> getListElements() {
+		return childrens;
 	}
 
 	@Override
@@ -58,11 +62,12 @@ public class ListUi extends Ui {
 	}
 
 	private void defineButtons() {
-		cellSize = childrens.stream().mapToInt(ListElement::getWidth).max().orElse(0);
+		cellSize = childrens.stream().mapToInt(le -> le.getWidth() < 0 ? ListUi.this.getWidth() : le.getWidth()).max()
+				.orElse(0);
 
 		int pageHeight = getHeight() - (paddingBottom + paddingTop);
 		int currentSize = 0;
-		int cells = oneCellList ? 1 : getWidth() / (sizeBetweenElement + cellSize);
+		int cells = oneCellList ? 1 : Math.max(1, getWidth() / (sizeBetweenElement + cellSize));
 		int cell = 0;
 		for (lastElement = firstElement; lastElement < searchElement.size() && cell < cells;) {
 			ListElement e = searchElement.get(lastElement);
@@ -264,7 +269,7 @@ public class ListUi extends Ui {
 		this.oneCellList = oneCellPerList;
 		return this;
 	}
-	
+
 	public ListUi withSizeBetweenElement(int size) {
 		if (size < 0)
 			throw new IllegalArgumentException("Negative size");

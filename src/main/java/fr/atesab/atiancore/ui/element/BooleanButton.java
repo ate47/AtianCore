@@ -25,7 +25,7 @@ public class BooleanButton extends EnumButton<Boolean> {
 		super(x, y, width, height, text, YES_NO, setter, getter);
 		withEnabledDisabledText();
 	}
-
+	
 	@Override
 	protected String getTextFromValue(Boolean value) {
 		setForegroundColor(value ? 0xff77ff77 : 0xffff7777);

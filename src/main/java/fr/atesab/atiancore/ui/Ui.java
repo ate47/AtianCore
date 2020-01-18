@@ -93,7 +93,7 @@ public class Ui {
 	 * @return the created abstract button
 	 */
 	protected Button addButton(int x, int y, int width, int height, String text) {
-		return addChild(new Button(x, y, width, height, text));
+		return addChildren(new Button(x, y, width, height, text));
 	}
 
 	/**
@@ -116,11 +116,11 @@ public class Ui {
 	 */
 	protected Slider addSlider(int x, int y, int width, int height, String text, double minVal, double maxVal,
 			double currentVal, boolean showDec, boolean drawStr) {
-		return addChild(new Slider(x, y, width, height, text, minVal, maxVal, currentVal, showDec, drawStr));
+		return addChildren(new Slider(x, y, width, height, text, minVal, maxVal, currentVal, showDec, drawStr));
 	}
 
 	protected TextField addTextField(Font font, int x, int y, int width, int height) {
-		return addChild(new TextField(font, x, y, width, height));
+		return addChildren(new TextField(font, x, y, width, height));
 	}
 
 	/**
@@ -130,7 +130,7 @@ public class Ui {
 	 *            the child element
 	 * @return the added element
 	 */
-	protected <E extends Element> E addChild(E child) {
+	protected <E extends Element> E addChildren(E child) {
 		childrens.add(child);
 		return child;
 	}

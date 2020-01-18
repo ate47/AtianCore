@@ -13,8 +13,16 @@ public class ListElement {
 	private int shiftX, shiftY;
 	private int width, height;
 
+	/**
+	 * @param width
+	 *            negative for the ui width
+	 * @param height
+	 *            the height of the element, positive
+	 */
 	public ListElement(int width, int height) {
 		this.width = width;
+		if (height < 0)
+			throw new IllegalArgumentException("negative height");
 		this.height = height;
 	}
 
@@ -24,6 +32,10 @@ public class ListElement {
 
 	protected <T extends Element> T addChildren(T children) {
 		childrens.add(children);
+		if (shiftX != 0)
+			children.setX(children.getX() + shiftX);
+		if (shiftY != 0)
+			children.setY(children.getY() + shiftY);
 		return children;
 	}
 

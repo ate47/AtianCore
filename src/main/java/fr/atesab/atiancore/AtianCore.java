@@ -22,9 +22,11 @@ import com.mojang.brigadier.tree.RootCommandNode;
 import fr.atesab.atiancore.command.ModdedCommand;
 import fr.atesab.atiancore.config.Config;
 import fr.atesab.atiancore.config.ConfigurationLoader;
+import fr.atesab.atiancore.news.NewsResolver;
 import fr.atesab.atiancore.reflection.ReflectionUtils;
 import fr.atesab.atiancore.ui.Ui;
 import fr.atesab.atiancore.ui.Ui.BuildUiConsumer;
+import fr.atesab.atiancore.ui.core.CoreConfigUi;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -60,6 +62,7 @@ import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
 @Mod(AtianCore.MOD_ID)
 public class AtianCore {
 	public static final String MOD_ID = "atiancore";
+	public static final String MOD_NAME = "AtianCore";
 	public static final Logger LOGGER = Logger.getLogger(MOD_ID);
 	private static CommandDispatcher<CommandSource> dispatcher = new CommandDispatcher<>();
 	private static Set<String> commandSet = new HashSet<>();
@@ -89,6 +92,29 @@ public class AtianCore {
 	 */
 	public static ConfigurationLoader createConfigToFile(File file, Object configObject) {
 		return new ConfigurationLoader(file, configObject);
+	}
+
+	/**
+	 * create a config directory for a name or throw an exception
+	 * 
+	 * @param modName
+	 *            the folder name
+	 * @return the file of this directory
+	 * @throws DirectoryException
+	 *             if the directory can't be created
+	 * @throws FileAlreadyExistsException
+	 *             if the file exists but isn't a directory
+	 */
+	public static File createModConfigFolder(String modName) {
+		File f = FMLPaths.CONFIGDIR.get().resolve(modName).toFile();
+		if (f.exists())
+			if (f.isDirectory())
+				return f;
+			else
+				throw new FileAlreadyExistsException(f.getAbsolutePath() + " isn't a directory");
+		if (f.mkdirs())
+			return f;
+		throw new DirectoryException("Can't create directory " + f.getAbsolutePath());
 	}
 
 	/**
@@ -134,13 +160,19 @@ public class AtianCore {
 	}
 
 	private ConfigurationLoader config;
+	private NewsResolver newsResolver = new NewsResolver(
+			"https://raw.githubusercontent.com/ate47/AtianCore/news/news.json", createModConfigFolder(MOD_NAME));
 
 	@Config(name = "infoMessage", comment = "Super useless config")
 	private boolean uselessConfig = true;
+	@Config(comment = "Create a menu in config", nameTranslated = "atiancore.gui.debug")
+	private boolean debugMode = false;
 
 	public AtianCore() {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		MinecraftForge.EVENT_BUS.register(this);
+
+		registerConfigUi(MOD_ID, parent -> new CoreConfigUi(parent, this));
 	}
 
 	private void checkModList(GuiScreen screen) {
@@ -281,10 +313,34 @@ public class AtianCore {
 		injectSuggestions();
 	}
 
+	/**
+	 * @return if the debug mode is enabled
+	 */
+	public boolean isDebugMode() {
+		return debugMode;
+	}
+
+	/**
+	 * set the debug mode
+	 * 
+	 * @param debugMode
+	 *            the new value
+	 */
+	public void setDebugMode(boolean debugMode) {
+		this.debugMode = debugMode;
+	}
+
+	/**
+	 * save the core config
+	 */
+	public void saveConfig() {
+		config.save();
+	}
+
 	private void setup(FMLLoadCompleteEvent ev) {
 		config = createConfigForMod(MOD_ID, this);
 		config.sync();
-
+		newsResolver.start();
 		if (uselessConfig) {
 			LOGGER.info("Super user config enabled");
 		}

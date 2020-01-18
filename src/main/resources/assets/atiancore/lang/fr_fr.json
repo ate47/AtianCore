@@ -1,9 +1,12 @@
 {
+	"atiancore.gui.config" : "Config",
+	"atiancore.gui.debug" : "Debug",
+	"atiancore.gui.commandList" : "Liste des commandes",
 
 	"atiancore.gui.yes" : "Oui",
 	"atiancore.gui.no" : "Non",
-	
 	"atiancore.gui.enabled" : "Activé",
-	"atiancore.gui.disabled" : "Desactivé"
+	"atiancore.gui.disabled" : "Desactivé",
+	"atiancore.gui.empty" : "Vide"
 
 }

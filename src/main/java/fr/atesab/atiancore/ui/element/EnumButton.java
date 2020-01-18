@@ -19,6 +19,7 @@ public class EnumButton<T> extends ValueButton<T> {
 
 		public EnumButtonConsumer(T[] elements, T element) {
 			index = Arrays.asList(elements).indexOf(element);
+			this.elements = elements;
 		}
 
 		@Override
