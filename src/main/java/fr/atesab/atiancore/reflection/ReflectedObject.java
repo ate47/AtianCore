@@ -2,6 +2,8 @@ package fr.atesab.atiancore.reflection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.function.Consumer;
 
 /**
  * A class to store an object and his class without knowing his type
@@ -122,24 +124,71 @@ public class ReflectedObject {
 	}
 
 	/**
-	 * get this object as a boolean
+	 * consumer a consumer on every declared field of this class and every super
+	 * classes
+	 * 
+	 * @param action
+	 *            the action to do
+	 */
+	public void forEachDeclaredField(Consumer<Field> action) {
+		forEachSuperClass(cls -> Arrays.asList(cls.getDeclaredFields()).forEach(action));
+	}
+
+	/**
+	 * consume a consumer on every field value of a certain type
+	 * 
+	 * @param type
+	 *            the type to search
+	 * @param action
+	 *            the action to do
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> void forEachDeclaredObjectOfType(Class<T> type, Consumer<T> action) {
+		forEachDeclaredField(field -> {
+			if (type.isAssignableFrom(field.getType()))
+				try {
+					field.setAccessible(true);
+					action.accept((T) field.get(action));
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+				}
+		});
+	}
+
+	/**
+	 * consume a consumer on this class and every super classes without counting the
+	 * {@link Object} class
+	 * 
+	 * @param action
+	 *            the action to do
+	 */
+	public void forEachSuperClass(Consumer<Class<?>> action) {
+		Class<?> type = this.type;
+		while (type != Object.class) {
+			action.accept(type);
+			type = type.getSuperclass();
+		}
+
+	}
+
+	/**
+	 * get this object as a boolean, return false if null or not a boolean
 	 */
 	public boolean getBoolean() {
-		return object == null ? null : ((Boolean) object).booleanValue();
+		return object == null ? false : object instanceof Boolean ? ((Boolean) object).booleanValue() : false;
 	}
 
 	/**
-	 * get this object as a byte
+	 * get this object as a byte, return 0 if null or not a Number
 	 */
 	public byte getByte() {
-		return object == null ? null : ((Byte) object).byteValue();
+		return object == null ? 0 : object instanceof Number ? ((Number) object).byteValue() : 0;
 	}
 
 	/**
-	 * get this object as a char
+	 * get this object as a char, return '\0' if null or not a Character
 	 */
 	public char getChar() {
-		return object == null ? null : ((Character) object).charValue();
+		return object == null ? '\0' : object instanceof Character ? ((Character) object).charValue() : '\0';
 	}
 
 	/**
@@ -164,16 +213,10 @@ public class ReflectedObject {
 	}
 
 	/**
-	 * get this object as a double
+	 * get this object as a double, return 0 if null or not a Number
 	 */
 	public double getDouble() {
-		return object == null ? null
-				: object instanceof Double ? ((Double) object).doubleValue()
-						: object instanceof Float ? (double) getFloat()
-								: object instanceof Integer ? (double) getInteger()
-										: object instanceof Short ? (double) getShort()
-												: object instanceof Long ? (double) getLong()
-														: ((Double) object).doubleValue();
+		return object == null ? 0 : object instanceof Number ? ((Number) object).doubleValue() : 0;
 	}
 
 	/**
@@ -191,42 +234,24 @@ public class ReflectedObject {
 	}
 
 	/**
-	 * get this object as a float
+	 * get this object as a float, return 0 if null or not a Number
 	 */
 	public float getFloat() {
-		return object == null ? null
-				: object instanceof Float ? ((Float) object).floatValue()
-						: object instanceof Double ? (float) getDouble()
-								: object instanceof Integer ? (float) getInteger()
-										: object instanceof Short ? (float) getShort()
-												: object instanceof Long ? (float) getLong()
-														: ((Float) object).floatValue();
+		return object == null ? 0 : object instanceof Number ? ((Number) object).floatValue() : 0;
 	}
 
 	/**
-	 * get this object as a integer
+	 * get this object as a integer, return 0 if null or not a Number
 	 */
 	public int getInteger() {
-		return object == null ? null
-				: object instanceof Integer ? ((Integer) object).intValue()
-						: object instanceof Double ? (int) getDouble()
-								: object instanceof Float ? (int) getFloat()
-										: object instanceof Short ? (int) getShort()
-												: object instanceof Long ? (int) getLong()
-														: ((Integer) object).intValue();
+		return object == null ? 0 : object instanceof Number ? ((Number) object).intValue() : 0;
 	}
 
 	/**
-	 * get this object as a long
+	 * get this object as a long, return 0 if null or not a Number
 	 */
 	public long getLong() {
-		return object == null ? null
-				: object instanceof Long ? ((Long) object).longValue()
-						: object instanceof Double ? (long) getDouble()
-								: object instanceof Float ? (long) getFloat()
-										: object instanceof Short ? (long) getShort()
-												: object instanceof Integer ? (long) ((Integer) object).intValue()
-														: ((Long) object).longValue();
+		return object == null ? 0 : object instanceof Number ? ((Number) object).longValue() : 0;
 	}
 
 	/**
@@ -256,10 +281,10 @@ public class ReflectedObject {
 	}
 
 	/**
-	 * get this object as a short
+	 * get this object as a short, return 0 if null or not a Number
 	 */
 	public short getShort() {
-		return object == null ? null : ((Short) object).shortValue();
+		return object == null ? 0 : object instanceof Number ? ((Number) object).shortValue() : 0;
 	}
 
 	/**

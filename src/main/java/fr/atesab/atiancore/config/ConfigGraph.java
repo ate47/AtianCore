@@ -10,17 +10,23 @@ public class ConfigGraph {
 	private String path;
 	private Map<String, ConfigGraph> childrens = new HashMap<>();
 	private List<ConfigField> fields = new ArrayList<>();
+	private String categorie;
 
-	public ConfigGraph(String path) {
+	public ConfigGraph(String path, String categorie) {
 		this.path = path;
+		this.categorie = categorie;
 	}
 
 	public ConfigGraph getOrCreateChildren(String categorie) {
-		return childrens.computeIfAbsent(categorie, s -> new ConfigGraph(path + "." + categorie));
+		return childrens.computeIfAbsent(categorie, s -> new ConfigGraph(path + "." + categorie, categorie));
 	}
 
 	public void addField(ConfigField field) {
 		fields.add(field);
+	}
+
+	public String getCategorie() {
+		return categorie;
 	}
 
 	public List<ConfigField> getFields() {

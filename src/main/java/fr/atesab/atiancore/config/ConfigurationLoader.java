@@ -39,13 +39,14 @@ public class ConfigurationLoader {
 	}
 
 	private void loadField(ConfigField parent, Config cfg, Field field) {
-		ConfigField current = new ConfigField(parent, cfg, field);
+		ConfigField current = new ConfigField(this, parent, cfg, field);
 		Class<?> type = field.getType();
 		Configurable configurable = type.getAnnotation(Configurable.class);
 		if (configurable != null) {
 			loadFields(current, type);
 		} else {
 			fields.add(current);
+			current.setDefaultValue(current.get());
 		}
 	}
 
@@ -58,11 +59,7 @@ public class ConfigurationLoader {
 	 */
 	public void save() {
 		for (ConfigField field : fields)
-			try {
-				field.setConfig(config, data);
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
+			field.setConfig(config);
 		config.save();
 	}
 
@@ -73,11 +70,7 @@ public class ConfigurationLoader {
 		config.load();
 
 		for (ConfigField field : fields)
-			try {
-				field.getConfig(config, data);
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
+			field.getConfig(config);
 		save();
 	}
 
@@ -85,7 +78,7 @@ public class ConfigurationLoader {
 	 * @return the graph of this config
 	 */
 	public ConfigGraph buildGraph() {
-		ConfigGraph g = new ConfigGraph("");
+		ConfigGraph g = new ConfigGraph("", "");
 		String path;
 		int sec;
 		ConfigGraph current;
@@ -99,5 +92,9 @@ public class ConfigurationLoader {
 			current.addField(field);
 		}
 		return g;
+	}
+
+	public Object getConfigObject() {
+		return data;
 	}
 }

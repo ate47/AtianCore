@@ -20,8 +20,23 @@ import net.minecraft.client.gui.GuiScreen;
  *
  */
 public class Ui {
+	/**
+	 * a UI builder from a parent
+	 * 
+	 * @author ATE47
+	 *
+	 * @param <UI>
+	 *            the {@link Ui} type
+	 */
 	@FunctionalInterface
 	public interface BuildUiConsumer<UI extends Ui> {
+		/**
+		 * build the ui from the parent
+		 * 
+		 * @param parent
+		 *            the parent ui
+		 * @return the new ui
+		 */
 		UI build(Ui parent);
 	}
 
@@ -43,7 +58,8 @@ public class Ui {
 	/**
 	 * build and display a screen giving the current screen
 	 * 
-	 * @param builder the builder
+	 * @param builder
+	 *            the builder
 	 * @return the ui
 	 */
 	public static <UI extends Ui> UI display(BuildUiConsumer<UI> builder) {
@@ -77,9 +93,7 @@ public class Ui {
 	 * @return the created abstract button
 	 */
 	protected Button addButton(int x, int y, int width, int height, String text) {
-		Button b = new Button(x, y, width, height, text);
-		childrens.add(b);
-		return b;
+		return addChild(new Button(x, y, width, height, text));
 	}
 
 	/**
@@ -102,15 +116,23 @@ public class Ui {
 	 */
 	protected Slider addSlider(int x, int y, int width, int height, String text, double minVal, double maxVal,
 			double currentVal, boolean showDec, boolean drawStr) {
-		Slider b = new Slider(x, y, width, height, text, minVal, maxVal, currentVal, showDec, drawStr);
-		childrens.add(b);
-		return b;
+		return addChild(new Slider(x, y, width, height, text, minVal, maxVal, currentVal, showDec, drawStr));
 	}
 
 	protected TextField addTextField(Font font, int x, int y, int width, int height) {
-		TextField f = new TextField(font, x, y, width, height);
-		childrens.add(f);
-		return f;
+		return addChild(new TextField(font, x, y, width, height));
+	}
+
+	/**
+	 * add a child to this {@link Ui}
+	 * 
+	 * @param child
+	 *            the child element
+	 * @return the added element
+	 */
+	protected <E extends Element> E addChild(E child) {
+		childrens.add(child);
+		return child;
 	}
 
 	/**
@@ -238,6 +260,75 @@ public class Ui {
 		for (Element e : childrens)
 			if (e.keyPressed(keyCode, scan, modifier))
 				return true;
+		return false;
+	}
+
+	/**
+	 * call when the mouse click
+	 * 
+	 * @param mouseX
+	 *            the mouse location x
+	 * @param mouseY
+	 *            the mouse location y
+	 * @param button
+	 *            the mouse button
+	 * @return if the click has been consumed
+	 */
+	public boolean mouseClicked(int mouseX, int mouseY, int button) {
+		for (Element e : childrens)
+			if (e.mouseClicked(mouseX, mouseY, button))
+				return true;
+		return false;
+	}
+
+	/**
+	 * call when the mouse drag a click
+	 * 
+	 * @param mouseX
+	 *            the new mouse location x
+	 * @param mouseY
+	 *            the new mouse location y
+	 * @param button
+	 *            the mouse button
+	 * @param shiftX
+	 *            the location difference x
+	 * @param shiftY
+	 *            the location difference y
+	 * @return if the drag has been consumed
+	 */
+	public boolean mouseDragged(int mouseX, int mouseY, int button, double shiftX, double shiftY) {
+		for (Element e : childrens)
+			if (e.mouseDragged(mouseX, mouseY, button, shiftX, shiftY))
+				return true;
+		return false;
+	}
+
+	/**
+	 * call when the mouse release a click
+	 * 
+	 * @param mouseX
+	 *            the mouse location x
+	 * @param mouseY
+	 *            the mouse location y
+	 * @param button
+	 *            the mouse button
+	 * @return if the click has been consumed
+	 */
+	public boolean mouseReleased(int mouseX, int mouseY, int button) {
+		for (Element e : childrens)
+			if (e.mouseReleased(mouseX, mouseY, button))
+				return true;
+		return false;
+	}
+
+	/**
+	 * call when the mouse scoll
+	 * 
+	 * @param factor
+	 *            the scoll factor
+	 * @return if the scoll has been consumed
+	 */
+	public boolean mouseScrolled(double factor) {
 		return false;
 	}
 

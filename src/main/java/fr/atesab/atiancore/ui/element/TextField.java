@@ -11,12 +11,17 @@ public class TextField implements Element {
 	}
 
 	@Override
+	public boolean charTyped(char key, int modifier) {
+		return getMcTextField().charTyped(key, modifier);
+	}
+
+	@Override
 	public int getHeight() {
-		return mcTextField.height;
+		return getMcTextField().height;
 	}
 
 	public int getMaxLength() {
-		return mcTextField.getMaxStringLength();
+		return getMcTextField().getMaxStringLength();
 	}
 
 	@Deprecated
@@ -26,79 +31,32 @@ public class TextField implements Element {
 
 	@Override
 	public String getText() {
-		return mcTextField.getText();
+		return getMcTextField().getText();
 	}
 
 	@Override
 	public int getWidth() {
-		return mcTextField.width;
+		return getMcTextField().width;
 	}
 
 	@Override
 	public int getX() {
-		return mcTextField.x;
+		return getMcTextField().x;
 	}
 
 	@Override
 	public int getY() {
-		return mcTextField.y;
+		return getMcTextField().y;
+	}
+
+	@Override
+	public boolean isFocused() {
+		return getMcTextField().isFocused();
 	}
 
 	@Override
 	public boolean isVisible() {
-		return mcTextField.getVisible();
-	}
-
-	public void setEnabled(boolean value) {
-		mcTextField.setEnabled(value);
-	}
-
-	public void setForegroundColor(int color) {
-		mcTextField.setTextColor(color);
-	}
-
-	@Override
-	public void setHeight(int value) {
-		mcTextField.height = value;
-	}
-
-	public void setMaxLength(int length) {
-		mcTextField.setMaxStringLength(length);
-	}
-
-	@Override
-	public void setText(String text) {
-		mcTextField.setText(text);
-	}
-
-	@Override
-	public void setVisible(boolean value) {
-		mcTextField.setVisible(value);
-	}
-
-	@Override
-	public void setWidth(int value) {
-		mcTextField.width = value;
-	}
-
-	@Override
-	public void setX(int value) {
-		mcTextField.x = value;
-	}
-
-	@Override
-	public void setY(int value) {
-		mcTextField.y = value;
-	}
-
-	@Override
-	public void tick() {
-		mcTextField.tick();
-	}
-
-	@Override
-	public boolean charTyped(char key, int modifier) {
-		return getMcTextField().charTyped(key, modifier);
+		return getMcTextField().getVisible();
 	}
 
 	@Override
@@ -107,11 +65,73 @@ public class TextField implements Element {
 	}
 
 	@Override
+	public boolean mouseClicked(int mouseX, int mouseY, int button) {
+		return getMcTextField().mouseClicked(mouseX, mouseY, button);
+	}
+
+	@Override
+	public boolean mouseDragged(int mouseX, int mouseY, int button, double shiftX, double shiftY) {
+		return getMcTextField().mouseDragged(mouseX, mouseY, button, shiftX, shiftY);
+	}
+
+	@Override
+	public boolean mouseReleased(int mouseX, int mouseY, int button) {
+		return getMcTextField().mouseReleased(mouseX, mouseY, button);
+	}
+
+	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
 		getMcTextField().drawTextField(mouseX, mouseY, partialTicks);
 	}
 
-	public boolean isFocused() {
-		return getMcTextField().isFocused();
+	public void setEnabled(boolean value) {
+		getMcTextField().setEnabled(value);
+	}
+
+	public void setForegroundColor(int color) {
+		getMcTextField().setTextColor(color);
+	}
+
+	@Override
+	public void setHeight(int value) {
+		getMcTextField().height = value;
+	}
+
+	public void setMaxLength(int length) {
+		getMcTextField().setMaxStringLength(length);
+	}
+
+	@Override
+	public void setText(String text) {
+		getMcTextField().setText(text);
+	}
+
+	public void setFocused(boolean isFocusedIn) {
+		getMcTextField().setFocused(true);
+	}
+
+	@Override
+	public void setVisible(boolean value) {
+		getMcTextField().setVisible(value);
+	}
+
+	@Override
+	public void setWidth(int value) {
+		getMcTextField().width = value;
+	}
+
+	@Override
+	public void setX(int value) {
+		getMcTextField().x = value;
+	}
+
+	@Override
+	public void setY(int value) {
+		getMcTextField().y = value;
+	}
+
+	@Override
+	public void tick() {
+		getMcTextField().tick();
 	}
 }

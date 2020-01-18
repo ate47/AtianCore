@@ -27,16 +27,8 @@ public class ReflectionUtils {
 	 * @param action
 	 *            the action to do
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T> void forEachFieldOfTypeInto(Class<T> type, Object obj, Consumer<T> action) {
-		for (Field f : obj.getClass().getDeclaredFields()) {
-			f.setAccessible(true);
-			if (f.getType() == type)
-				try {
-					action.accept((T) f.get(obj));
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-				}
-		}
+		new ReflectedObject(obj).forEachDeclaredObjectOfType(type, action);
 	}
 
 	public static <T extends Annotation> void forEachFieldWithAnnotation(Class<T> annotation, Class<?> type,
@@ -106,26 +98,66 @@ public class ReflectionUtils {
 	public static Class<?>[] getPrivimitiveParameterTypes(Object... parameters) {
 		Class<?>[] parameterTypes = new Class<?>[parameters.length];
 		for (int i = 0; i < parameters.length; i++) {
-			if (parameters[i].getClass().equals(Double.class))
-				parameterTypes[i] = double.class;
-			else if (parameters[i].getClass().equals(Integer.class))
-				parameterTypes[i] = int.class;
-			else if (parameters[i].getClass().equals(Long.class))
-				parameterTypes[i] = long.class;
-			else if (parameters[i].getClass().equals(Short.class))
-				parameterTypes[i] = short.class;
-			else if (parameters[i].getClass().equals(Byte.class))
-				parameterTypes[i] = byte.class;
-			else if (parameters[i].getClass().equals(Boolean.class))
-				parameterTypes[i] = boolean.class;
-			else if (parameters[i].getClass().equals(Float.class))
-				parameterTypes[i] = float.class;
-			else if (parameters[i].getClass().equals(Character.class))
-				parameterTypes[i] = char.class;
-			else
-				parameterTypes[i] = parameters[i].getClass();
+			parameterTypes[i] = primitiveType(parameters[i].getClass());
 		}
 		return parameterTypes;
+	}
+
+	/**
+	 * get the object type for an object
+	 * 
+	 * @param type
+	 *            the type
+	 * @return the non primitive type if primitive
+	 */
+	public static Class<?> primitiveType(Class<?> type) {
+		if (type.equals(Double.class))
+			return double.class;
+		else if (type.equals(Integer.class))
+			return int.class;
+		else if (type.equals(Long.class))
+			return long.class;
+		else if (type.equals(Short.class))
+			return short.class;
+		else if (type.equals(Byte.class))
+			return byte.class;
+		else if (type.equals(Boolean.class))
+			return boolean.class;
+		else if (type.equals(Float.class))
+			return float.class;
+		else if (type.equals(Character.class))
+			return char.class;
+		else
+			return type;
+	}
+
+	/**
+	 * get the object type for an object
+	 * 
+	 * @param type
+	 *            the type
+	 * @return the non primitive type if primitive
+	 */
+	public static Class<?> unprimitiveType(Class<?> type) {
+		if (type.isPrimitive()) {
+			if (type == int.class)
+				return Integer.class;
+			if (type == short.class)
+				return Short.class;
+			if (type == long.class)
+				return Long.class;
+			if (type == double.class)
+				return Double.class;
+			if (type == float.class)
+				return Float.class;
+			if (type == char.class)
+				return Character.class;
+			if (type == byte.class)
+				return Byte.class;
+			if (type == boolean.class)
+				return Boolean.class;
+		}
+		return type;
 	}
 
 }

@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package fr.atesab.atiancore.config;
 
 import static java.lang.annotation.ElementType.TYPE;
@@ -6,13 +9,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+@Retention(RUNTIME)
+@Target(TYPE)
 /**
- * use to set a deep scan into a Type with {@link Config} annotation
+ * say this class can be configure
  * 
  * @author ATE47
  *
  */
-@Retention(RUNTIME)
-@Target(TYPE)
 public @interface Configurable {
+
 }

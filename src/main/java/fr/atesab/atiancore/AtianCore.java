@@ -23,8 +23,6 @@ import fr.atesab.atiancore.command.ModdedCommand;
 import fr.atesab.atiancore.config.Config;
 import fr.atesab.atiancore.config.ConfigurationLoader;
 import fr.atesab.atiancore.reflection.ReflectionUtils;
-import fr.atesab.atiancore.ui.ListElement;
-import fr.atesab.atiancore.ui.ListUi;
 import fr.atesab.atiancore.ui.Ui;
 import fr.atesab.atiancore.ui.Ui.BuildUiConsumer;
 import net.minecraft.client.Minecraft;
@@ -143,16 +141,6 @@ public class AtianCore {
 	public AtianCore() {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		MinecraftForge.EVENT_BUS.register(this);
-		AtianCore.registerConfigUi(MOD_ID, parent -> new ListUi("test", parent) {
-			{
-				for (int i = 0; i < 200; i++)
-					addChildren(new ListElement(200, 20) {
-						{
-							addButton(0, 0, 200, 20, "Super button");
-						}
-					});
-			}
-		});
 	}
 
 	private void checkModList(GuiScreen screen) {

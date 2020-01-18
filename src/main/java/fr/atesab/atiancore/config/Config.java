@@ -30,4 +30,9 @@ public @interface Config {
 	 * @return the path in the config file
 	 */
 	String path() default "general";
+
+	/**
+	 * @return the name translated of this config
+	 */
+	String nameTranslated() default "";
 }

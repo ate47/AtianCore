@@ -15,9 +15,14 @@ public class Slider implements Element, ISlider {
 				this);
 	}
 
-	public Slider action(Consumer<Slider> action) {
-		this.action = action;
+	public Slider addAction(Consumer<Slider> action) {
+		this.action = this.action == null ? action : this.action.andThen(action);
 		return this;
+	}
+
+	@Override
+	public boolean charTyped(char key, int modifier) {
+		return getMcSlider().charTyped(key, modifier);
 	}
 
 	@Override
@@ -63,14 +68,44 @@ public class Slider implements Element, ISlider {
 	}
 
 	@Override
+	public boolean isFocused() {
+		return false;
+	}
+
+	@Override
 	public boolean isVisible() {
 		return mcSlider.visible;
+	}
+
+	@Override
+	public boolean keyPressed(int keyCode, int scan, int modifier) {
+		return getMcSlider().keyPressed(keyCode, scan, modifier);
+	}
+
+	@Override
+	public boolean mouseClicked(int mouseX, int mouseY, int button) {
+		return getMcSlider().mouseClicked(mouseX, mouseY, button);
+	}
+
+	@Override
+	public boolean mouseDragged(int mouseX, int mouseY, int button, double shiftX, double shiftY) {
+		return getMcSlider().mouseDragged(mouseX, mouseY, button, shiftX, shiftY);
+	}
+
+	@Override
+	public boolean mouseReleased(int mouseX, int mouseY, int button) {
+		return getMcSlider().mouseReleased(mouseX, mouseY, button);
 	}
 
 	@Override
 	public void onChangeSliderValue(GuiSlider slider) {
 		if (action != null)
 			action.accept(this);
+	}
+
+	@Override
+	public void render(int mouseX, int mouseY, float partialTicks) {
+		getMcSlider().render(mouseX, mouseY, partialTicks);
 	}
 
 	@Override
@@ -117,20 +152,5 @@ public class Slider implements Element, ISlider {
 
 	@Override
 	public void tick() {
-	}
-
-	@Override
-	public boolean charTyped(char key, int modifier) {
-		return getMcSlider().charTyped(key, modifier);
-	}
-
-	@Override
-	public boolean keyPressed(int keyCode, int scan, int modifier) {
-		return getMcSlider().keyPressed(keyCode, scan, modifier);
-	}
-
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
-		getMcSlider().render(mouseX, mouseY, partialTicks);
 	}
 }

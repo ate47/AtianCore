@@ -19,9 +19,14 @@ public class Button implements Element {
 		};
 	}
 
-	public Button action(Consumer<Button> action) {
-		this.action = action;
+	public Button addAction(Consumer<Button> action) {
+		this.action = this.action == null ? action : this.action.andThen(action);
 		return this;
+	}
+
+	@Override
+	public boolean charTyped(char key, int modifier) {
+		return getMcButton().charTyped(key, modifier);
 	}
 
 	public int getForegroundColor() {
@@ -31,6 +36,11 @@ public class Button implements Element {
 	@Override
 	public int getHeight() {
 		return mcButton.height;
+	}
+
+	@Deprecated
+	public GuiButton getMcButton() {
+		return mcButton;
 	}
 
 	@Override
@@ -57,6 +67,11 @@ public class Button implements Element {
 		return mcButton.enabled;
 	}
 
+	@Override
+	public boolean isFocused() {
+		return false;
+	}
+
 	public boolean isHovered() {
 		return mcButton.isMouseOver();
 	}
@@ -64,6 +79,31 @@ public class Button implements Element {
 	@Override
 	public boolean isVisible() {
 		return mcButton.visible;
+	}
+
+	@Override
+	public boolean keyPressed(int keyCode, int scan, int modifier) {
+		return getMcButton().keyPressed(keyCode, scan, modifier);
+	}
+
+	@Override
+	public boolean mouseClicked(int mouseX, int mouseY, int button) {
+		return getMcButton().mouseClicked(mouseX, mouseY, button);
+	}
+
+	@Override
+	public boolean mouseDragged(int mouseX, int mouseY, int button, double shiftX, double shiftY) {
+		return getMcButton().mouseDragged(mouseX, mouseY, button, shiftX, shiftY);
+	}
+
+	@Override
+	public boolean mouseReleased(int mouseX, int mouseY, int button) {
+		return getMcButton().mouseReleased(mouseX, mouseY, button);
+	}
+
+	@Override
+	public void render(int mouseX, int mouseY, float partialTicks) {
+		getMcButton().render(mouseX, mouseY, partialTicks);
 	}
 
 	public void setEnabled(boolean value) {
@@ -104,29 +144,7 @@ public class Button implements Element {
 		mcButton.y = value;
 	}
 
-	@Deprecated
-	public GuiButton getMcButton() {
-		return mcButton;
-	}
-
 	@Override
 	public void tick() {
 	}
-
-	@Override
-	public boolean charTyped(char key, int modifier) {
-		return getMcButton().charTyped(key, modifier);
-	}
-
-	@Override
-	public boolean keyPressed(int keyCode, int scan, int modifier) {
-		return getMcButton().keyPressed(keyCode, scan, modifier);
-	}
-
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
-		getMcButton().render(mouseX, mouseY, partialTicks);
-	}
-	
-
 }
